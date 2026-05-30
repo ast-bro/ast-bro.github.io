@@ -270,7 +270,7 @@ function App() {
           />
           <div>
             <div className="brand-name">ast-bro</div>
-            <div className="brand-subtitle">Visual Identity / Technical Cartography</div>
+            <div className="brand-subtitle">Technical Cartography</div>
           </div>
         </div>
         <a
