@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown'
 import './App.css'
 import { TerminalDemo } from './components/TerminalDemo'
 
-const slideLabels = ['Overview', 'Terrain', 'Pipeline', 'Demo', 'System', 'Ask']
+const slideLabels = ['Overview', 'Video', 'Terrain', 'Pipeline', 'Demo', 'System', 'Ask']
 
 const terrainSignals = [
   {
@@ -19,7 +19,7 @@ const terrainSignals = [
   {
     title: 'Fallback Preserves Trust',
     body: 'If legend plus compressed body is larger than raw input, ast-bro emits the original instead of pretending it helped.',
-    coord: 'src/squeeze/render.rs L86-L107',
+    coord: 'src/squeeze/render.rs L86-L116',
   },
 ]
 
@@ -28,37 +28,37 @@ const pipelineStages = [
     tag: '#T#',
     title: 'Timestamp Dictionary',
     body: 'Frequent ISO8601 prefixes become reusable anchors.',
-    coord: 'src/squeeze/mod.rs L646-L660',
+    coord: 'src/squeeze/mod.rs L596-L610',
   },
   {
     tag: '#0#',
     title: 'Component Extraction',
     body: 'Repeated [Tag] and key= fragments collapse into short labels.',
-    coord: 'src/squeeze/mod.rs L663-L664',
+    coord: 'src/squeeze/mod.rs L613-L614',
   },
   {
     tag: '#a#',
     title: 'Base62 Tags',
     body: 'Long numeric placeholders shrink again so the compression tags stay cheap.',
-    coord: 'src/squeeze/mod.rs L320-L323',
+    coord: 'src/squeeze/mod.rs L118-L121',
   },
   {
     tag: '!n!',
     title: 'BPE + Meta BPE',
     body: 'Repeated token runs and repeated tag sequences both become compact macros.',
-    coord: 'src/squeeze/mod.rs L326-L468',
+    coord: 'src/squeeze/mod.rs L341-L483',
   },
   {
     tag: '&1',
     title: 'Macro Templating',
     body: 'Near-identical lines with one changing field promote into reusable line templates.',
-    coord: 'src/squeeze/mod.rs L523-L545',
+    coord: 'src/squeeze/mod.rs L531-L551',
   },
   {
     tag: 'xN',
     title: 'Dedup Floor',
     body: 'Consecutive duplicates collapse into counts while preserving exact replay semantics.',
-    coord: 'src/squeeze/mod.rs L606-L629',
+    coord: 'src/squeeze/mod.rs L552-L575',
   },
 ]
 
@@ -71,12 +71,12 @@ const proofCards = [
   {
     title: 'Deterministic Output',
     body: 'Tag order sorts by savings, then first-seen, so tests stay stable and screenshots remain consistent.',
-    meta: 'src/squeeze/mod.rs L314-L317',
+    meta: 'src/squeeze/mod.rs L313-L316',
   },
   {
     title: 'MCP Reach',
     body: 'src/mcp/tools.rs gets the same surface, so agents can request a squeezed result without pasting raw noise.',
-    meta: 'src/mcp/tools.rs L1118-L1164',
+    meta: 'src/mcp/tools.rs L1118-L1170',
   },
   {
     title: 'JSON Contract',
@@ -144,10 +144,24 @@ function App() {
   const goToSlide = (index: number) => {
     const clamped = Math.max(0, Math.min(lastSlide, index))
     setCurrent(clamped)
-    sectionRefs.current[clamped]?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    })
+    
+    // Fallback if ref isn't available
+    const sectionElement = sectionRefs.current[clamped]
+    if (sectionElement) {
+      sectionElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    } else {
+      // Direct DOM query fallback for mobile
+      const element = document.querySelector(`[data-slide="${clamped}"]`)
+      if (element) {
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        })
+      }
+    }
   }
 
   useEffect(() => {
@@ -223,8 +237,8 @@ function App() {
         }
       },
       {
-        threshold: [0.25, 0.4, 0.6, 0.8],
-        rootMargin: '-18% 0px -24% 0px',
+        threshold: [0.1, 0.25, 0.4, 0.6, 0.8],
+        rootMargin: '-10% 0px -20% 0px',
       },
     )
 
@@ -234,7 +248,7 @@ function App() {
   }, [])
 
   useEffect(() => {
-    if (current === 3) {
+    if (current === 4) {
       setDemoRunId((value) => value + 1)
     }
   }, [current])
@@ -352,12 +366,44 @@ function App() {
         </section>
 
         <section
-          id="slide-terrain"
+          id="slide-video"
           ref={(element) => {
             sectionRefs.current[1] = element
           }}
           data-slide="1"
           className={`slide ${current === 1 ? 'is-active' : ''}`}
+        >
+          <div className="slide-frame">
+            <div className="section-heading">
+              <p className="eyebrow">2.3.0 RELEASE</p>
+              <h2>SEE IT IN ACTION.</h2>
+            </div>
+            <div className="video-container">
+              <iframe
+                width="100%"
+                height="100%"
+                src="https://www.youtube.com/embed/Ys0llTK0OyQ?rel=0"
+                title="ast-bro v2.3.0 Release Video"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              ></iframe>
+            </div>
+          </div>
+          <div className="slide-anchor">
+            <span>release broadcast / direct capability proof</span>
+            <span>ast-bro 2.3.0 / sb squeeze demo</span>
+          </div>
+        </section>
+
+        <section
+          id="slide-terrain"
+          ref={(element) => {
+            sectionRefs.current[2] = element
+          }}
+          data-slide="2"
+          className={`slide ${current === 2 ? 'is-active' : ''}`}
         >
           <div className="slide-frame slide-frame--split">
             <div className="section-heading">
@@ -407,15 +453,15 @@ function App() {
         <section
           id="slide-pipeline"
           ref={(element) => {
-            sectionRefs.current[2] = element
+            sectionRefs.current[3] = element
           }}
-          data-slide="2"
-          className={`slide ${current === 2 ? 'is-active' : ''}`}
+          data-slide="3"
+          className={`slide ${current === 3 ? 'is-active' : ''}`}
         >
           <div className="slide-frame">
             <div className="section-heading">
               <p className="eyebrow">THE PIPELINE</p>
-              <h2>SEVEN STAGES, ONE CLEAN STORY.</h2>
+              <h2>SIX STAGES, ONE CLEAN STORY.</h2>
             </div>
             <div className="pipeline-grid">
               {pipelineStages.map((stage) => (
@@ -455,10 +501,10 @@ function App() {
         <section
           id="slide-demo"
           ref={(element) => {
-            sectionRefs.current[3] = element
+            sectionRefs.current[4] = element
           }}
-          data-slide="3"
-          className={`slide ${current === 3 ? 'is-active' : ''}`}
+          data-slide="4"
+          className={`slide ${current === 4 ? 'is-active' : ''}`}
         >
           <div className="slide-frame slide-frame--demo">
             <div className="demo-copy">
@@ -488,7 +534,7 @@ function App() {
             </div>
 
             <div className="demo-surface">
-              <TerminalDemo key={demoRunId} active={current === 3} runId={demoRunId} />
+              <TerminalDemo key={demoRunId} active={current === 4} runId={demoRunId} />
               <div className="demo-summary">
                 <article className="summary-card">
                   <span className="summary-card__label">Compression</span>
@@ -524,10 +570,10 @@ function App() {
         <section
           id="slide-system"
           ref={(element) => {
-            sectionRefs.current[4] = element
+            sectionRefs.current[5] = element
           }}
-          data-slide="4"
-          className={`slide ${current === 4 ? 'is-active' : ''}`}
+          data-slide="5"
+          className={`slide ${current === 5 ? 'is-active' : ''}`}
         >
           <div className="slide-frame">
             <div className="section-heading">
@@ -561,10 +607,10 @@ function App() {
         <section
           id="slide-ask"
           ref={(element) => {
-            sectionRefs.current[5] = element
+            sectionRefs.current[6] = element
           }}
-          data-slide="5"
-          className={`slide ${current === 5 ? 'is-active' : ''}`}
+          data-slide="6"
+          className={`slide ${current === 6 ? 'is-active' : ''}`}
         >
           <div className="slide-frame">
             <div className="section-heading">
@@ -592,7 +638,7 @@ function App() {
           </div>
           <div className="slide-anchor">
             <span>museum print lower third / centered metadata / controlled negative space</span>
-            <span>ast-bro / squeeze / 2026.05</span>
+            <span>ast-bro / squeeze / v2.3.0</span>
           </div>
         </section>
       </main>
