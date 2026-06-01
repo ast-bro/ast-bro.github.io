@@ -2,17 +2,19 @@ import { useEffect, useMemo, useState } from 'react'
 import { Terminal, useTerminal } from '@wterm/react'
 import '@wterm/react/css'
 
-type TerminalDemoProps = {
-  active: boolean
-  runId: number
-}
-
-type Frame = {
+export type Frame = {
   delay: number
   text: string
 }
 
-const script: Frame[] = [
+type TerminalDemoProps = {
+  active: boolean
+  runId: number
+  script?: Frame[]
+  meta?: { title: string; subtitle: string }
+}
+
+const squeezeScript: Frame[] = [
   {
     delay: 180,
     text: '\x1b[38;5;179msb squeeze logs/desktop-ci.log 140:220 --json\x1b[0m\r\n',
@@ -63,10 +65,15 @@ const script: Frame[] = [
   },
 ]
 
-export function TerminalDemo({ active, runId }: TerminalDemoProps) {
+export function TerminalDemo({
+  active,
+  runId,
+  script,
+  meta = { title: 'sb squeeze', subtitle: 'live command output' },
+}: TerminalDemoProps) {
   const { ref, write } = useTerminal()
   const [ready, setReady] = useState(false)
-  const frames = useMemo(() => script, [])
+  const frames = useMemo(() => script ?? squeezeScript, [script])
 
   useEffect(() => {
     if (!active || !ready) {
@@ -89,10 +96,10 @@ export function TerminalDemo({ active, runId }: TerminalDemoProps) {
   }, [active, frames, ready, runId, write])
 
   return (
-    <div className="terminal-shell" aria-hidden={!active} {...(!active ? { inert: true as any } : {})}>
+    <div className="terminal-shell" aria-hidden={!active} inert={!active}>
       <div className="terminal-shell__meta">
-        <span>sb squeeze</span>
-        <span>live command output</span>
+        <span>{meta.title}</span>
+        <span>{meta.subtitle}</span>
       </div>
       <Terminal
         key={runId}
