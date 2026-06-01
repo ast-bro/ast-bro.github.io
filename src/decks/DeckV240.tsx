@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown'
 import '../App.css'
 import { TerminalDemo, type Frame } from '../components/TerminalDemo'
 
-const slideLabels = ['Overview', 'Trace', 'Cache', 'Search', 'Demo', 'System', 'Ask']
+const slideLabels = ['Overview', 'Video', 'Trace', 'Cache', 'Search', 'Demo', 'System', 'Ask']
 
 const traceSignals = [
   {
@@ -207,7 +207,7 @@ function DeckV240() {
 
   const lastSlide = slideLabels.length - 1
   // Bumps when the demo slide is entered, remounting the terminal to replay.
-  const demoRunId = current === 4 ? 1 : 0
+  const demoRunId = current === 5 ? 1 : 0
 
   const goToSlide = useCallback((index: number) => {
     const clamped = Math.max(0, Math.min(lastSlide, index))
@@ -429,12 +429,44 @@ function DeckV240() {
         </section>
 
         <section
-          id="slide-trace"
+          id="slide-video"
           ref={(element) => {
             sectionRefs.current[1] = element
           }}
           data-slide="1"
           className={`slide ${current === 1 ? 'is-active' : ''}`}
+        >
+          <div className="slide-frame">
+            <div className="section-heading">
+              <p className="eyebrow">V2.4.0 INTRO</p>
+              <h2>WATCH THE INTRO.</h2>
+            </div>
+            <div className="video-container">
+              <iframe
+                width="100%"
+                height="100%"
+                src="https://www.youtube.com/embed/t5uKtaPzEH8?rel=0"
+                title="ast-bro v2.4.0 Intro Video"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              ></iframe>
+            </div>
+          </div>
+          <div className="slide-anchor">
+            <span>release intro / direct capability proof</span>
+            <span>ast-bro v2.4.0 / trace · live cache · inline filters</span>
+          </div>
+        </section>
+
+        <section
+          id="slide-trace"
+          ref={(element) => {
+            sectionRefs.current[2] = element
+          }}
+          data-slide="2"
+          className={`slide ${current === 2 ? 'is-active' : ''}`}
         >
           <div className="slide-frame slide-frame--split">
             <div className="section-heading">
@@ -484,10 +516,10 @@ function DeckV240() {
         <section
           id="slide-cache"
           ref={(element) => {
-            sectionRefs.current[2] = element
+            sectionRefs.current[3] = element
           }}
-          data-slide="2"
-          className={`slide ${current === 2 ? 'is-active' : ''}`}
+          data-slide="3"
+          className={`slide ${current === 3 ? 'is-active' : ''}`}
         >
           <div className="slide-frame">
             <div className="section-heading">
@@ -532,10 +564,10 @@ function DeckV240() {
         <section
           id="slide-search"
           ref={(element) => {
-            sectionRefs.current[3] = element
+            sectionRefs.current[4] = element
           }}
-          data-slide="3"
-          className={`slide ${current === 3 ? 'is-active' : ''}`}
+          data-slide="4"
+          className={`slide ${current === 4 ? 'is-active' : ''}`}
         >
           <div className="slide-frame">
             <div className="section-heading">
@@ -571,10 +603,10 @@ function DeckV240() {
         <section
           id="slide-demo"
           ref={(element) => {
-            sectionRefs.current[4] = element
+            sectionRefs.current[5] = element
           }}
-          data-slide="4"
-          className={`slide ${current === 4 ? 'is-active' : ''}`}
+          data-slide="5"
+          className={`slide ${current === 5 ? 'is-active' : ''}`}
         >
           <div className="slide-frame slide-frame--demo">
             <div className="demo-copy">
@@ -606,7 +638,7 @@ function DeckV240() {
             <div className="demo-surface">
               <TerminalDemo
                 key={demoRunId}
-                active={current === 4}
+                active={current === 5}
                 runId={demoRunId}
                 script={traceScript}
                 meta={{ title: 'sb trace', subtitle: 'live command output' }}
@@ -646,10 +678,10 @@ function DeckV240() {
         <section
           id="slide-system"
           ref={(element) => {
-            sectionRefs.current[5] = element
+            sectionRefs.current[6] = element
           }}
-          data-slide="5"
-          className={`slide ${current === 5 ? 'is-active' : ''}`}
+          data-slide="6"
+          className={`slide ${current === 6 ? 'is-active' : ''}`}
         >
           <div className="slide-frame">
             <div className="section-heading">
@@ -683,10 +715,10 @@ function DeckV240() {
         <section
           id="slide-ask"
           ref={(element) => {
-            sectionRefs.current[6] = element
+            sectionRefs.current[7] = element
           }}
-          data-slide="6"
-          className={`slide ${current === 6 ? 'is-active' : ''}`}
+          data-slide="7"
+          className={`slide ${current === 7 ? 'is-active' : ''}`}
         >
           <div className="slide-frame">
             <div className="section-heading">
