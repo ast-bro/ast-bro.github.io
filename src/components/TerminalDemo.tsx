@@ -96,7 +96,7 @@ export function TerminalDemo({
   }, [active, frames, ready, runId, write])
 
   return (
-    <div className="terminal-shell" aria-hidden={!active} inert={!active}>
+    <div className="terminal-shell" inert={!active}>
       <div className="terminal-shell__meta">
         <span>{meta.title}</span>
         <span>{meta.subtitle}</span>

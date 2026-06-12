@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import DeckV230 from './decks/DeckV230'
 import DeckV240 from './decks/DeckV240'
+import DeckV300 from './decks/DeckV300'
 
 // Hash-based routing so archived versions work on any static host
 // (GitHub Pages, Vercel, local) with no server rewrite. `/` shows the
@@ -18,11 +19,14 @@ function App() {
     return () => window.removeEventListener('hashchange', onHashChange)
   }, [])
 
-  if (version === 'v2.3.0') {
-    return <DeckV230 />
+  switch (version) {
+    case 'v2.3.0':
+      return <DeckV230 />
+    case 'v2.4.0':
+      return <DeckV240 />
+    default:
+      return <DeckV300 />
   }
-
-  return <DeckV240 />
 }
 
 export default App
